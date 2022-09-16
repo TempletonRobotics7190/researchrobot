@@ -1,0 +1,1 @@
+This repository is for the robot made at the robotics summer camp (2022)
