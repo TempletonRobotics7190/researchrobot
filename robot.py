@@ -1,24 +1,18 @@
-import wpilib
-import wpilib.drive
-import ctre
+import wpilib, commands2
 
-class Robot(wpilib.TimedRobot):
+from robot_container import RobotContainer
+
+
+class Robot(commands2.TimedCommandRobot):
     def robotInit(self):
-        self.back_left = ctre.WPI_VictorSPX(9)
-        self.front_right = ctre.WPI_VictorSPX(10)
-        self.back_right = ctre.WPI_VictorSPX(8)
-        self.front_left = ctre.WPI_VictorSPX(7)
+        self.container = RobotContainer()
+        self.autonomous_command = self.container.getAutonomousCommand()
 
-        left_side = wpilib.MotorControllerGroup(self.front_left, self.back_left)
-        right_side = wpilib.MotorControllerGroup(self.front_right, self.back_right)
-        self.myRobot = wpilib.drive.DifferentialDrive(left_side, right_side)
+    def autonomousInit(self):
+        self.autonomous_command.schedule()
 
-        self.stick = wpilib.Joystick(0)
+    def teleopInit(self):
+        self.autonomous_command.cancel()
 
-    def teleopPeriodic(self):
-        self.myRobot.arcadeDrive(
-            self.stick.getRawAxis(0), -self.stick.getRawAxis(1)
-        )
-
-    
-wpilib.run(Robot)
+if __name__ == "__main__":
+    wpilib.run(Robot)
