@@ -1,4 +1,4 @@
-import wpilib, constants, commands2
+import wpilib, constants, commands2, commands2.button
 import commands, subsystems
 
 class RobotContainer:
@@ -7,30 +7,36 @@ class RobotContainer:
 
         # The robot's subsystems
         self.drive_train = subsystems.DriveTrain()
+        self.shooter = subsystems.Shooter()
+        self.intake = subsystems.Intake()
+        self.belt = subsystems.Belt()
+
+        # Commands
+        self.shoot = commands.Shoot(self.shooter, self.belt)
 
         # Autonomous routine
-        self.autonomous = commands.Autonomous(self.drive_train)
+        self.autonomous = commands.Autonomous()
 
-        self.configureButtonBindings()
 
         # set up default drive command
         self.drive_train.setDefaultCommand(
             commands.JoystickDrive(self.joystick, self.drive_train)
         )
 
+        self.configureButtonBindings()
+
+
     def configureButtonBindings(self):
-        pass
-        # commands2.button.JoystickButton(self.joystick, 1).whenPressed(
-        #     GrabHatch(self.hatch)
-        # )
+        trigger = commands2.button.JoystickButton(self.joystick, 1)
+        button2 = commands2.button.JoystickButton(self.joystick, 2)
+        trigger.whileHeld(
+            self.shoot
+        )
+        button2.whileHeld(
+            commands2.StartEndCommand(self.intake.start, self.intake.stop)
+        )
 
-        # commands2.button.JoystickButton(self.driverController, 2).whenPressed(
-        #     ReleaseHatch(self.hatch)
-        # )
-
-        # commands2.button.JoystickButton(self.driverController, 3).whenHeld(
-        #     HalveDriveSpeed(self.drive)
-        # )
+        
 
     def getAutonomousCommand(self):
         return self.autonomous
