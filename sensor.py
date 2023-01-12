@@ -1,14 +1,14 @@
-import wpilib, commands2
+import wpilib
 
-class Sensor(commands2.SubsystemBase):
+
+class Sensor:
     def __init__(self, port):
-        super().__init__(self)
         self.counter = wpilib.Counter(port)
         self.counter.setMaxPeriod(1.0)
         self.counter.setSemiPeriodMode(True)
         self.counter.reset()
     
-    def getDistance(self):
+    def get_distance(self):
         cm = 0
     
         if self.counter.get() < 1:
