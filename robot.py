@@ -1,8 +1,7 @@
-
 import wpilib
 import wpilib.drive
 import ctre
-import sensor
+import lidar_sensor
 
 class MyRobot(wpilib.TimedRobot):
     def robotInit(self):
@@ -16,22 +15,29 @@ class MyRobot(wpilib.TimedRobot):
         self.drive = wpilib.drive.DifferentialDrive(left_side, right_side)
 
         self.stick = wpilib.Joystick(0)
-        self.sensor = sensor.Sensor(0)
+
+        self.lidar_sensor = lidar_sensor.LidarSensor(0)
+        self.gyro = wpilib.ADIS16448_IMU()
 
         self.timer = wpilib.Timer()
         self.timer.start()
+
+        self.dashboard = wpilib.SmartDashboard()
+    
+    def robotPeriodic(self):
+        self.dashboard.putNumber("Gyroscope Y Axis", self.gyro.getGyroAngleY())
+        self.dashboard.putNumber("Laser Sensor Distance", self.lidar_sensor.get_distance())
 
     def teleopPeriodic(self):
         self.drive.arcadeDrive(
             self.stick.getRawAxis(0), -self.stick.getRawAxis(1)
         )
     
-        
     def autonomousInit(self):
         self.timer.reset()
 
     def autonomousPeriodic(self):
-        if self.sensor.get_distance() > 100:
+        if self.lidar_sensor.get_distance() > 100:
             self.drive.arcadeDrive(-.3, -0.5)
         else:
             self.drive.arcadeDrive(0 , 0)
