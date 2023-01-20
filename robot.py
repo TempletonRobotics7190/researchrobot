@@ -1,46 +1,29 @@
+
 import wpilib
-import wpilib.drive
-import ctre
-import lidar_sensor
+import commands2
+from robot_container import RobotContainer
 
-class MyRobot(wpilib.TimedRobot):
+
+class Robot(commands2.TimedCommandRobot):
     def robotInit(self):
-        self.front_right = ctre.WPI_VictorSPX(1)
-        self.back_left = ctre.WPI_VictorSPX(2)
-        self.back_right = ctre.WPI_VictorSPX(3)
-        self.front_left = ctre.WPI_VictorSPX(4)
+        self.autonomousCommand = None
 
-        left_side = wpilib.MotorControllerGroup(self.front_left, self.back_left)
-        right_side = wpilib.MotorControllerGroup(self.front_right, self.back_right)
-        self.drive = wpilib.drive.DifferentialDrive(left_side, right_side)
+        self.container = RobotContainer()
 
-        self.stick = wpilib.Joystick(0)
-
-        self.lidar_sensor = lidar_sensor.LidarSensor(0)
-        self.gyro = wpilib.ADIS16448_IMU()
-
-        self.timer = wpilib.Timer()
-        self.timer.start()
-
-        self.dashboard = wpilib.SmartDashboard()
-    
-    def robotPeriodic(self):
-        self.dashboard.putNumber("Gyroscope Y Axis", self.gyro.getGyroAngleY())
-        self.dashboard.putNumber("Laser Sensor Distance", self.lidar_sensor.get_distance())
-
-    def teleopPeriodic(self):
-        self.drive.arcadeDrive(
-            self.stick.getRawAxis(0), -self.stick.getRawAxis(1)
-        )
-    
+  
     def autonomousInit(self):
-        self.timer.reset()
+        self.autonomousCommand = self.container.getAutonomousCommand()
 
-    def autonomousPeriodic(self):
-        if self.lidar_sensor.get_distance() > 100:
-            self.drive.arcadeDrive(-.3, -0.5)
+        # schedule the autonomous command (example)
+        if self.autonomousCommand is not None:
+            self.autonomousCommand.schedule()
         else:
-            self.drive.arcadeDrive(0 , 0)
-        
-       
-wpilib.run(MyRobot)
+            print("no auto command?")
+   
+    def teleopInit(self):
+        if self.autonomousCommand is not None:
+            self.autonomousCommand.cancel()
+
+    
+if __name__ == "__main__":
+    wpilib.run(Robot)

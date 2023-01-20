@@ -1,7 +1,7 @@
 import wpilib
 
 
-class Sensor:
+class LaserSensor:
     def __init__(self, port):
         self.counter = wpilib.Counter(port)
         self.counter.setMaxPeriod(1.0)
