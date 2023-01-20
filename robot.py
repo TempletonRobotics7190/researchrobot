@@ -1,6 +1,5 @@
 
-import wpilib
-import commands2
+import wpilib, commands2
 from robot_container import RobotContainer
 
 
@@ -25,5 +24,4 @@ class Robot(commands2.TimedCommandRobot):
             self.autonomousCommand.cancel()
 
     
-if __name__ == "__main__":
-    wpilib.run(Robot)
+wpilib.run(Robot)

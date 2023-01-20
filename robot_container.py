@@ -1,9 +1,7 @@
 
-import commands2, wpilib
-import commands2.button
+import commands2, commands2.button, wpilib
 
-import subsystems
-import commands
+import subsystems, commands
 
 
 class RobotContainer:
@@ -15,12 +13,15 @@ class RobotContainer:
     """
 
     def __init__(self):
+        # Subsystems
         self.drive_train = subsystems.DriveTrain()
+        self.drive_train.setDefaultCommand(commands.JoystickDrive(self.drive_train))
 
         self.example_pneumatics = subsystems.ExamplePneumatics()
+
+        # Other
         self.gyroscope = wpilib.ADIS16448_IMU()
         
-        self.drive_train.setDefaultCommand(commands.JoystickDrive(self.drive_train))
 
         self.configureButtonBindings()
 
@@ -40,4 +41,3 @@ class RobotContainer:
      
     def getAutonomousCommand(self):
         return commands.Stabilize(self.drive_train, self.gyroscope)
-        #  return commands.ExampleAuto(self.drive_train)

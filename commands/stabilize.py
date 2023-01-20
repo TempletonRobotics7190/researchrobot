@@ -1,4 +1,5 @@
 import wpilib, commands2
+import constants
 
 class Stabilize(commands2.CommandBase):
     def __init__(self, drive_train, gyroscope):
@@ -8,18 +9,21 @@ class Stabilize(commands2.CommandBase):
         self.gyroscope = gyroscope
 
     def execute(self):
-        gyroY = round(self.gyroscope.getGyroAngleY())
-        gyroZ = round(self.gyroscope.getGyroAngleZ())
+        gyro_y = round(self.gyroscope.getGyroAngleY())
+        gyro_z= round(self.gyroscope.getGyroAngleZ())
 
-        goodnesspoint = 5
-        movement = self._calc_movement(gyroY, goodnesspoint)
-        rot = self._calc_movement(gyroZ, goodnesspoint)
-        self.drive_train.move(movement, rot)
+        forward_speed = self._calc_speed(gyro_y, 
+        constants.STABILIZE_ACCURACY_RANGE_Y)
+
+        rotation_speed = self._calc_speed(gyro_z, 
+        constants.STABILIZE_ACCURACY_RANGE_Z)
+
+        self.drive_train.move(forward_speed, rotation_speed)
         
-    def _calc_movement(self, angle, goodnesspoint):
-        if angle > goodnesspoint :
+    def _calc_speed(self, angle, accuracy_range):
+        if angle > accuracy_range:
             return -.6          
-        if angle < -goodnesspoint:
+        if angle < -accuracy_range:
             return .6
 
         return 0
