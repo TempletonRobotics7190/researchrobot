@@ -17,7 +17,7 @@ class RobotContainer:
         self.drive_train = subsystems.DriveTrain()
         self.drive_train.setDefaultCommand(commands.JoystickDrive(self.drive_train))
 
-        self.example_pneumatics = subsystems.ExamplePneumatics()
+        # self.example_pneumatics = subsystems.ExamplePneumatics()
 
         # Other
         self.gyroscope = wpilib.ADIS16448_IMU()
