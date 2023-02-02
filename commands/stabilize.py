@@ -22,8 +22,7 @@ class Stabilize(commands2.CommandBase):
         
     def _calc_speed(self, angle, accuracy_range):
         if angle > accuracy_range:
-            return -.6          
+            return -.5   
         if angle < -accuracy_range:
-            return .6
-
+            return .5
         return 0

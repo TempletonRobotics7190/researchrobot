@@ -6,9 +6,6 @@ class JoystickDrive(commands2.CommandBase):
         self.drive_train = drive_train
         self.joystick = wpilib.Joystick(0)
         self.addRequirements(drive_train)
-    
-    def initialize(self) -> None:
-        return super().initialize()
 
     def execute(self):
         self.drive_train.move(

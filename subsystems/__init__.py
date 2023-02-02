@@ -1,2 +1,3 @@
 from subsystems.drive_train import DriveTrain
-from subsystems.example_pneumatics import ExamplePneumatics
+from subsystems.test_pneumatics import TestPneumatics
+from subsystems.test_motor import TestMotor

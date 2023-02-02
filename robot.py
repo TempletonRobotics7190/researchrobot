@@ -18,6 +18,10 @@ class Robot(commands2.TimedCommandRobot):
             self.autonomousCommand.schedule()
         else:
             print("no auto command?")
+        
+    def robotPeriodic(self) -> None:
+        super().robotPeriodic()
+        #print(round(self.container.gyroscope.getGyroAngleY()))
    
     def teleopInit(self):
         if self.autonomousCommand is not None:
