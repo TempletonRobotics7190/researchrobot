@@ -1,6 +1,8 @@
 
 import commands2, commands2.button, wpilib
 
+from commands2.button import CommandXboxController, JoystickButton
+
 import subsystems, commands, constants
 
 
@@ -24,7 +26,7 @@ class RobotContainer:
             self.test_pneumatics = subsystems.TestPneumatics()
         
         # Other
-        #self.gyroscope = wpilib.ADIS16448_IMU()
+        self.gyroscope = wpilib.ADIS16448_IMU()
 
         self.configureButtonBindings()
 
@@ -34,7 +36,7 @@ class RobotContainer:
         factories on commands2.button.CommandGenericHID or one of its
         subclasses (commands2.button.CommandJoystick or command2.button.CommandXboxController).
         """
-        
+        """
         command_joystick = commands2.button.CommandJoystick(0)
         side_button = commands2.button.JoystickButton(command_joystick, 2)
         back_button = commands2.button.JoystickButton(command_joystick, 1)
@@ -58,6 +60,19 @@ class RobotContainer:
                 self.test_pneumatics.close2,
                 self.test_pneumatics.open2
             ))
+        """
+
+        arm_controller = CommandXboxController(0)
+        # wheel_controller = CommandXboxController(1)
+
+        arm_a_button = JoystickButton(arm_controller, arm_controller.Button.kA)
+
+        # wheel_left_stick = JoystickButton(wheel_controller, wheel_controller.Button.kLeftStick)
+
+        arm_a_button.whenHeld(commands2.StartEndCommand(
+            self.test_motor.start,
+            self.test_motor.stop
+        ))
         
 
      
@@ -65,4 +80,4 @@ class RobotContainer:
         return None
         # return commands2.SequentialCommandGroup([commands.Stabilize(self.drive_train, self.gyroscope)])
 
-#Andrew was here lmao so was ALEX
+# Andrew was here lmao so was ALEX

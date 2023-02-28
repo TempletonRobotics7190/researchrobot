@@ -9,6 +9,6 @@ class JoystickDrive(commands2.CommandBase):
 
     def execute(self):
         self.drive_train.move(
-            -self.joystick.getRawAxis(1), self.joystick.getRawAxis(0)
+            self.joystick.getRawAxis(1), -self.joystick.getRawAxis(0)
         )
    
